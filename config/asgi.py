@@ -18,13 +18,14 @@ from channels.auth import AuthMiddlewareStack
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 django_asgi_app = get_asgi_application()
+# application = get_asgi_application()
 
-# TODO: Import routing module here for websocket URLs
 # Ensure that the routing module is imported to register the websocket URLs
+from apps.rtchat import routing
 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
-    # "websocket": AllowedHostsOriginValidator(
-    #     AuthMiddlewareStack(URLRouter(routing.websocket_urlpatterns))
-    # )
+    "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(URLRouter(routing.websocket_urlpatterns))
+    )
 })
